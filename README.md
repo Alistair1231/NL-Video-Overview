@@ -9,6 +9,7 @@ yt-dlp --flat-playlist -i --print-to-file url yt-urls.txt https://www.youtube.co
 yt-dlp --simulate --verbose --batch-file yt-urls.txt --cookies-from-browser brave --download-archive done.txt --force-write-archive --replace-in-metadata "title,channel" "\"" "'" --print-to-file '{"channel": "%(channel)s", "uploadDate": "%(upload_date)s", "videoUrl": "%(webpage_url)s", "title": "%(title)s"},' nl.json
 
 # ! manually edit the last line to remove the trailing comma and add the closing bracket
+# ! on rerun (when appending to the file), make sure to readd the comma and remove the closing bracket to get a valid json file
 
 # filter out a game
 jq '[.[] | select(.title | contains("Climbing"))] | sort_by(.uploadDate)' nl.json > games/climbing-game.json
