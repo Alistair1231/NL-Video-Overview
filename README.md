@@ -1,5 +1,5 @@
-To use this, install jq and yt-dlp
-Add to playlist needs python and these packages: google-auth-oauthlib google-api-python-client
+To use this, install jq and yt-dlp e.g. using `scoop` on windows, `brew` on mac and `nix` on linux.  
+For adding to your accounts playlist, you also need python and these packages: `pip install google-auth-oauthlib google-api-python-client`
 
 ```bash
 # Generate yt-urls.txt
@@ -24,11 +24,9 @@ python add_to_playlist.py --title "Climbing Game - NL" --description "Chronologi
 ## Filter out the videos
 ```bash
 # twitch
-jq '[.[] | select(.title | contains("A Difficult Game About Climbing")) | {title, published_at, url}]' \
-twitch_videos_data.json > games/"A Difficult Game About Climbing.json"
+jq '[.[] | select(.title | contains("A Difficult Game About Climbing")) | {title, published_at, url}]' twitch_videos_data.json > games/climbing-game-twitch.json
 
 # youtube
-jq '[.[] | select(.title | contains("Climbing"))] | sort_by(.uploadDate)' \
-nl-vods.json > games/climbing-game.json
+jq '[.[] | select(.title | contains("Climbing"))] | sort_by(.uploadDate)' nl-vods.json > games/climbing-game.json
 ```
 
