@@ -19,14 +19,5 @@ jq -r '.[].videoUrl' games/climbing-game.json > games/climbing-game-urls.txt
 # add to playlist
 python add_to_playlist.py --title "Climbing Game - NL" --description "Chronological list of videos for \"Climbing Game\" from Northernlion (NL)" --file games/climbing-game-urls.txt
 
-```
-
-## Filter out the videos
-```bash
-# twitch
-jq '[.[] | select(.title | contains("A Difficult Game About Climbing")) | {title, published_at, url}]' twitch_videos_data.json > games/climbing-game-twitch.json
-
-# youtube
-jq '[.[] | select(.title | contains("Climbing"))] | sort_by(.uploadDate)' nl-vods.json > games/climbing-game.json
-```
+``
 
