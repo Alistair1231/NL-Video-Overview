@@ -22,7 +22,9 @@ The script doesn't have many dependencies, you can install them with `pip instal
 ### Generate yt-urls.txt
 so that you can cancel/resume without rescraping the channel
 ```bash
-yt-dlp --flat-playlist -i --print-to-file url intermediary/yt-urls.txt https://www.youtube.com/@Northernlion
+yt-dlp \
+  --flat-playlist -i \
+  --print-to-file url intermediary/yt-urls.txt https://www.youtube.com/@Northernlion
 ```
 
 
@@ -32,14 +34,23 @@ yt-dlp --flat-playlist -i --print-to-file url intermediary/yt-urls.txt https://w
 - print-to-file is used to save the info in json format
 - download-archive / force-write-archive is used to track which videos have been processed already
 ```bash
-yt-dlp --simulate --verbose --batch-file intermediary/yt-urls.txt --cookies-from-browser brave --download-archive intermediary/done.txt --force-write-archive --replace-in-metadata "title,channel" "\"" "'" --print-to-file '{"channel": "%(channel)s", "uploadDate": "%(upload_date)s", "videoUrl": "%(webpage_url)s", "title": "%(title)s"}' intermediary/nl.json
+yt-dlp \
+  --simulate \
+  --verbose \
+  --batch-file intermediary/yt-urls.txt \
+  --cookies-from-browser brave \
+  --download-archive intermediary/done.txt \
+  --force-write-archive \
+  --replace-in-metadata "title,channel" "\"" "'" \
+  --print-to-file '{"channel": "%(channel)s", "uploadDate": "%(upload_date)s", "videoUrl": "%(webpage_url)s", "title": "%(title)s"}' intermediary/nl.json
 ```
 
 ### filter out a game from list of videos 
 - be aware that this is case sensitive, so Climbing is not the same as climbing
 - Replace `(A Difficult Game About Climbing)` with what you want to search for
 ```bash
-jq -s '[.[] | select(.title | contains("(A Difficult Game About Climbing)"))] | sort_by(.uploadDate)' intermediary/nl.json > games/climbing-game.json
+jq -s '[.[] | select(.title | contains("(A Difficult Game About Climbing)"))] | sort_by(.uploadDate)' \
+  intermediary/nl.json > games/climbing-game.json
 ```
 **manually validate the list**
 ```bash
@@ -48,12 +59,16 @@ vim games/climbing-game.json
 
 ### generate a list of urls for the playlist-adder
 ```bash
-jq -r '.[].videoUrl' games/climbing-game.json > games/climbing-game-urls.txt
+jq -r '.[].videoUrl' \
+  games/climbing-game.json > games/climbing-game-urls.txt
 ```
 ### add to playlist
 
 ```bash
-python add_to_playlist.py --title "Climbing Game - NL" --description "Chronological list of videos for \"Climbing Game\" from Northernlion (NL)" --file games/climbing-game-urls.txt
+python add_to_playlist.py \
+  --title "Climbing Game - NL" \
+  --description "Chronological list of videos for \"Climbing Game\" from Northernlion (NL)" \
+  --file games/climbing-game-urls.txt
 
 ```
 
