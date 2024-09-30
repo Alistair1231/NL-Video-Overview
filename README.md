@@ -1,3 +1,10 @@
+# Northernlion Channel Scraper / Playlist Generator
+This is a collection of commands / documentation to scrape the Northernlion channel for videos and generate playlists for specific games.
+
+This also contains the scraped data for anyone to access and save people from the need to scrape over 20k videos before starting to use it. 
+
+It is set up in a way that should make it easy to update the data when new videos are uploaded.
+
 ## Getting started
 To use this, install jq and yt-dlp e.g. using `scoop` on windows, `brew` on mac and `nix` on linux.  
 
