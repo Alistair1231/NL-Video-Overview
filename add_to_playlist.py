@@ -71,7 +71,25 @@ def get_or_create_playlist(youtube, title, description):
     print(f"Created new playlist '{title}'")
     return response['id']
 
-def add_video_to_playlist(youtube, playlist_id, video_id):
+def get_playlist_videos(youtube, playlist_id):
+    video_ids = []
+    request = youtube.playlistItems().list(
+        part="snippet",
+        playlistId=playlist_id,
+        maxResults=50
+    )
+    while request:
+        response = request.execute()
+        for item in response['items']:
+            video_ids.append(item['snippet']['resourceId']['videoId'])
+        request = youtube.playlistItems().list_next(request, response)
+    return video_ids
+
+def add_video_to_playlist(youtube, playlist_id, video_id,existing_videos):
+    if video_id in existing_videos:
+        print(f"Video {video_id} is already in the playlist.")
+        return
+
     request = youtube.playlistItems().insert(
         part="snippet",
         body={
@@ -85,6 +103,8 @@ def add_video_to_playlist(youtube, playlist_id, video_id):
         }
     )
     request.execute()
+    print(f"Added video {video_id} to playlist")
+    existing_videos.append(video_id)
 
 def extract_video_id(url):
     if "youtu.be" in url:
@@ -100,6 +120,8 @@ def main(title, description, file_path):
     playlist_id = get_or_create_playlist(youtube, title, description)
     print(f"Using playlist with ID: {playlist_id}")
     
+    existing_videos = get_playlist_videos(youtube, playlist_id)
+        
     try:
         with open(file_path, 'r') as file:
             video_urls = file.readlines()
@@ -115,7 +137,7 @@ def main(title, description, file_path):
         video_id = extract_video_id(url)
         if video_id:
             try:
-                add_video_to_playlist(youtube, playlist_id, video_id)
+                add_video_to_playlist(youtube, playlist_id, video_id, existing_videos)
                 print(f"Added video {video_id} to playlist")
             except Exception as e:
                 print(f"Error adding video {video_id}: {str(e)}")
