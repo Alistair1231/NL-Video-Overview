@@ -42,7 +42,8 @@ yt-dlp \
   --download-archive intermediary/done.txt \
   --force-write-archive \
   --replace-in-metadata "title,channel" "\"" "'" \
-  --print-to-file '{"channel": "%(channel)s", "uploadDate": "%(upload_date)s", "videoUrl": "%(webpage_url)s", "title": "%(title)s"}' intermediary/nl.json
+  --print-to-file '{"channel": "%(channel)s", "uploadDate": "%(upload_date)s", "videoUrl": "%(webpage_url)s", "title": "%(title)s"}' \
+  intermediary/nl.json
 ```
 
 ### filter out a game from list of videos 
