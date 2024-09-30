@@ -23,7 +23,8 @@ The script doesn't have many dependencies, you can install them with `pip instal
 so that you can cancel/resume without rescraping the channel
 ```bash
 yt-dlp \
-  --flat-playlist -i \
+  --flat-playlist \
+  --ignore-errors \
   --print-to-file url intermediary/yt-urls.txt https://www.youtube.com/@Northernlion
 ```
 
