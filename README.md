@@ -25,7 +25,8 @@ so that you can cancel/resume without rescraping the channel
 yt-dlp \
   --flat-playlist \
   --ignore-errors \
-  --print-to-file url intermediary/yt-urls.txt https://www.youtube.com/@Northernlion
+  --print-to-file 'url' intermediary/yt-urls.txt \
+  https://www.youtube.com/@Northernlion
 ```
 
 
