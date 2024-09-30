@@ -12,7 +12,7 @@ sed -i '$s/]$/,/' nl.json
 yt-dlp --simulate --verbose --batch-file yt-urls.txt --cookies-from-browser brave --download-archive done.txt --force-write-archive --replace-in-metadata "title,channel" "\"" "'" --print-to-file '{"channel": "%(channel)s", "uploadDate": "%(upload_date)s", "videoUrl": "%(webpage_url)s", "title": "%(title)s"}' nl.json
 
 # filter out a game from list of videos
-jq -sc '[.[] | select(.title | contains("Climbing"))] | sort_by(.uploadDate)' nl.json > games/climbing-game.json
+jq -s '[.[] | select(.title | contains("Climbing"))] | sort_by(.uploadDate)' nl.json > games/climbing-game.json
 
 # ! manually validate the list
 
