@@ -1,21 +1,28 @@
-To use this, install jq, sed and yt-dlp e.g. using `scoop` on windows, `brew` on mac and `nix` on linux.  
-For adding to your accounts playlist, you also need python and these packages: `pip install google-auth-oauthlib google-api-python-client`
+## Getting started
+To use this, install jq and yt-dlp e.g. using `scoop` on windows, `brew` on mac and `nix` on linux.  
+
+## Setting up add-to-playlist
+If you want to automatically create playlists follow these steps:
+
+You need to create a project in the [Google Cloud Console](https://console.cloud.google.com/) and enable the YouTube Data API v3 in it, then create OAuth 2.0 credentials (client ID and client secret) for a desktop application. Copy `yt.env.example` to `yt.env` and fill in the values.
+
+The script doesn't have many dependencies, you can install them with `pip install -r requirements.txt`. 
 
 Example usage:
 ```bash
-# Generate yt-urls.txt
+# Generate yt-urls.txt, so that you can cancel/resume without rescraping the channel
 yt-dlp --flat-playlist -i --print-to-file url yt-urls.txt https://www.youtube.com/@Northernlion
 
-# prepare json file, by removing the bracket and adding a comma on the last line
-sed -i '$s/]$/,/' nl.json
-
 # gather up info about videos and save in json format
+## the cookies-from-browser flag helps a lot with rate limiting, you need to be logged in and replace brave with your browser
+## the replace-in-metadata flag is used to replace quotes with single-quotes, to avoid issues with the json format
 yt-dlp --simulate --verbose --batch-file yt-urls.txt --cookies-from-browser brave --download-archive done.txt --force-write-archive --replace-in-metadata "title,channel" "\"" "'" --print-to-file '{"channel": "%(channel)s", "uploadDate": "%(upload_date)s", "videoUrl": "%(webpage_url)s", "title": "%(title)s"}' nl.json
 
 # filter out a game from list of videos (be aware that this is case sensitive, so Climbing is not the same as climbing)
-jq -s '[.[] | select(.title | contains("A Difficult Game About Climbing"))] | sort_by(.uploadDate)' nl.json > games/climbing-game.json
+jq -s '[.[] | select(.title | contains("(A Difficult Game About Climbing)"))] | sort_by(.uploadDate)' nl.json > games/climbing-game.json
 
 # ! manually validate the list
+vim games/climbing-game.json
 
 # create url list for playlist-adder
 jq -r '.[].videoUrl' games/climbing-game.json > games/climbing-game-urls.txt
@@ -24,3 +31,4 @@ jq -r '.[].videoUrl' games/climbing-game.json > games/climbing-game-urls.txt
 python add_to_playlist.py --title "Climbing Game - NL" --description "Chronological list of videos for \"Climbing Game\" from Northernlion (NL)" --file games/climbing-game-urls.txt
 
 ```
+

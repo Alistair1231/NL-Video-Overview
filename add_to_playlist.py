@@ -4,6 +4,11 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
+# import debugpy
+from dotenv import load_dotenv
+
+# Load environment variables from yt.env file
+load_dotenv('yt.env')
 
 # If modifying these scopes, delete the file token.json.
 SCOPES = ['https://www.googleapis.com/auth/youtube.force-ssl']
@@ -16,8 +21,20 @@ def get_authenticated_service():
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
         else:
-            flow = InstalledAppFlow.from_client_secrets_file(
-                'client_secrets.json', SCOPES)
+            flow = InstalledAppFlow.from_client_config(
+                {
+                    "installed": {
+                        "client_id": os.getenv('GOOGLE_CLIENT_ID'),
+                        "project_id": os.getenv('GOOGLE_PROJECT_ID'),
+                        "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+                        "token_uri": "https://oauth2.googleapis.com/token",
+                        "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+                        "client_secret": os.getenv('GOOGLE_CLIENT_SECRET'),
+                        "redirect_uris": ["urn:ietf:wg:oauth:2.0:oob", "http://localhost"]
+                    }
+                },
+                SCOPES
+            )
             creds = flow.run_local_server(port=0)
         with open('token.json', 'w') as token:
             token.write(creds.to_json())
@@ -46,7 +63,7 @@ def get_or_create_playlist(youtube, title, description):
             "description": description
           },
           "status": {
-            "privacyStatus": "private"
+            "privacyStatus": "public"
           }
         }
     )
@@ -114,5 +131,8 @@ if __name__ == "__main__":
     parser.add_argument('--file', required=True, help='Path to the text file containing YouTube URLs')
     
     args = parser.parse_args()
+    
+    # debugpy.listen(5678)
+    # debugpy.wait_for_client()
     
     main(args.title, args.description, args.file)
