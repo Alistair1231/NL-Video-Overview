@@ -44,7 +44,7 @@ yt-dlp \
   --download-archive intermediary/done.txt \
   --force-write-archive \
   --replace-in-metadata "title,channel" "\"" "'" \
-  --print-to-file '{"channel": "%(channel)s", "uploadDate": "%(upload_date)s", "videoUrl": "%(webpage_url)s", "title": "%(title)s"}' \
+  --print-to-file '{"channel": "%(channel)s", "uploadDate": "%(upload_date)sT%(epoch-3600>%H%M%S)s", "videoUrl": "%(webpage_url)s", "title": "%(title)s"}' \
   intermediary/nl.json
 ```
 
