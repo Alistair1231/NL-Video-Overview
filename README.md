@@ -61,7 +61,7 @@ jq -r '.[].videoUrl' \
 To add the videos to a playlist, I do 50 at a time (limit of anonymous playlists).  
 I first create an anonymous playlist and then use the 3$ Patreon-only feature of PocketTube to add the videos to the playlist all at once.
 
-To split the list of urls into 50 per file, you can use the following command. We want the coreutils version of split, because the mac version does not support the --additional-suffix flag, and the youtube playlist generator needs a .txt extension for the "import" feature (󰘳-I on Mac)
+To split the list of urls into 50 per file, you can use the following command. We want the coreutils version of split, because the mac version does not support the --additional-suffix flag, and the youtube playlist generator needs a .txt extension for the "import" feature (CMD-I on Mac)
 ```bash
 split -l 50 games/balatro-urls.txt games/balatro-urls- --additional-suffix=.txt
 # on mac: brew install coreutils and use gsplit
