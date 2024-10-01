@@ -8,15 +8,6 @@ It is set up in a way that should make it easy to update the data when new video
 ## Getting started
 To use this, install jq and yt-dlp e.g. using `scoop` on windows, `brew` on mac and `nix` on linux.  
 
-## Setting up add-to-playlist
-If you want to automatically create playlists follow these steps, otherwise you can skip this section.
-
-First install python, the version shouldn't matter, but it can be beneficial to lag a version behind the latest. So if the latest is 3.10, install 3.9.
-
-Also you need to create a project in the [Google Cloud Console](https://console.cloud.google.com/) and enable the YouTube Data API v3 in it, then create OAuth 2.0 credentials (client ID and client secret) for a desktop application. Copy `yt.env.example` to `yt.env` and fill in the values.
-
-The script doesn't have many dependencies, you can install them with `pip install -r requirements.txt`. 
-
 ## Usage
 
 ### Generate yt-urls.txt
@@ -67,11 +58,25 @@ jq -r '.[].videoUrl' \
 ```
 ### add to playlist
 
-```bash
-python add_to_playlist.py \
-  --title "Climbing Game - NL" \
-  --description "Chronological list of videos for \"Climbing Game\" from Northernlion (NL)" \
-  --file games/climbing-game-urls.txt
+To add the videos to a playlist, I do 50 at a time (limit of anonymous playlists).  
+I first create an anonymous playlist and then use the 3$ Patreon-only feature of PocketTube to add the videos to the playlist all at once.
 
+To split the list of urls into 50 per file, you can use the following command. We want the coreutils version of split, because the mac version does not support the --additional-suffix flag, and the youtube playlist generator needs a .txt extension for the "import" feature (󰘳-I on Mac)
+```bash
+split -l 50 games/balatro-urls.txt games/balatro-urls- --additional-suffix=.txt
+# on mac: brew install coreutils and use gsplit
+gsplit -l 50 games/balatro-urls.txt games/balatro-urls- --additional-suffix=.txt
+# on windows your alone on this one, I would just use msys/cygwin or wsl instead of fighting with powershell, but you do you)
 ```
 
+To create the anonymous playlist, you can use the following:
+- Use this downloadable tool: [christianhofmanncodes/youtube-playlist-generator](https://github.com/christianhofmanncodes/youtube-playlist-generator)
+- or this website: https://apps.dominiczelek.com/youtube-playlist-from-links/
+
+[PocketTube](https://pockettube.io/) has a Patreon-only feature that allows you to add all videos in a list to another playlist at once. We do this to have the 5000 video limit of a playlist instead of the 50 video limit of an anonymous playlist, also you cannot save anonymous playlists.
+At the time of writing the UI of PocketTube looks like this:
+
+![add-to-playlist](add-to-playlist.png)
+
+--- 
+I did create a semi-working python script for this but decided against refining it, the last commit with it is [5343200](https://github.com/Alistair1231/NL-Video-Overview/commit/5343200dc2ee1542d06d4fcda916b62c2f607aa4), feel free to use it as a starting point and create a PR if you want to improve it and provide a free alternative to the Patreon-only feature of PocketTube. This still doesn't get around the 200 per-day limit of the youtube api, but that's not that big of a deal imo.
