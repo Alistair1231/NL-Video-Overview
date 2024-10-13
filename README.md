@@ -48,7 +48,7 @@ jq -s '[.[] | select(.title | contains("(A Difficult Game About Climbing)"))] | 
 ```
 **manually validate the list**
 ```bash
-vim games/climbing-game.json
+code games/climbing-game.json
 ```
 
 ### generate a list of urls for the playlist-adder
@@ -80,3 +80,14 @@ At the time of writing the UI of PocketTube looks like this:
 
 --- 
 I did create a semi-working python script for this but decided against refining it, the last commit with it is [5343200](https://github.com/Alistair1231/NL-Video-Overview/commit/5343200dc2ee1542d06d4fcda916b62c2f607aa4), feel free to use it as a starting point and create a PR if you want to improve it and provide a free alternative to the Patreon-only feature of PocketTube. This still doesn't get around the 200 per-day limit of the youtube api, but that's not that big of a deal imo.
+
+## Summary
+```bash
+jq -s '[.[] | select(.title | contains("(A Difficult Game About Climbing)"))] | sort_by(.uploadDate)' intermediary/nl.json > games/climbing-game.json
+
+code games/climbing-game.json
+
+jq -r '.[].videoUrl' games/climbing-game.json > games/climbing-game-urls.txt
+
+code games/climbing-game-urls.txt
+```
