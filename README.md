@@ -13,6 +13,7 @@ To use this, install jq and yt-dlp e.g. using `scoop` on windows, `brew` on mac 
 ### Generate yt-urls.txt
 so that you can cancel/resume without rescraping the channel
 ```bash
+rm intermediary/yt-urls.txt
 yt-dlp \
   --flat-playlist \
   --ignore-errors \
