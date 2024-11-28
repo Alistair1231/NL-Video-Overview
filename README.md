@@ -73,6 +73,8 @@ gsplit -l 50 games/balatro-urls.txt games/balatro-urls- --additional-suffix=.txt
 To create the anonymous playlist, you can use the following:
 - Use this downloadable tool: [christianhofmanncodes/youtube-playlist-generator](https://github.com/christianhofmanncodes/youtube-playlist-generator)
 - or this website: https://apps.dominiczelek.com/youtube-playlist-from-links/
+- or manually create the link: `https://www.youtube.com/watch_videos?video_ids={id1},{id2}`
+- to get from "viewing view" to "playlist view", change link to `https://www.youtube.com/playlist?list={playlist-id}`
 
 [PocketTube](https://pockettube.io/) has a Patreon-only feature that allows you to add all videos in a list to another playlist at once. We do this to have the 5000 video limit of a playlist instead of the 50 video limit of an anonymous playlist, also you cannot save anonymous playlists.
 At the time of writing the UI of PocketTube looks like this:
